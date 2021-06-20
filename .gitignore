@@ -1,6 +1,6 @@
 images_all/
 tars/
 tf_records/
-!output
 output/*
+!output/.gitkeep
 
