@@ -309,9 +309,13 @@ def input_fn(is_training,
 
 def chexnet_model(FLAGS):
     """ Builds the chexnet model using specifics from FLAGS. Returns a compiled model."""
-    base_model = DenseNet121(include_top=False,
-                             weights='imagenet',
-                             input_shape=(FLAGS.image_size, FLAGS.image_size, 3))
+    #base_model = DenseNet121(include_top=False,
+    #                         weights='imagenet',
+    #                         input_shape=(FLAGS.image_size, FLAGS.image_size, 3))
+    
+    base_model = resnet50.ResNet50(include_top=False,
+                                   weights='imagenet',
+                                   input_shape=(FLAGS.image_size, FLAGS.image_size, 3))
 
     x = base_model.output
     x = GlobalAveragePooling2D()(x)
@@ -479,6 +483,12 @@ def main():
     # time after training
     end = time()
     
+    train_time = end-start
+    print("Total training time for {} epoch(s): {}s".format(FLAGS.epochs,train_time))
+    throughput = ((_NUM_TRAINING_IMAGES*FLAGS.epochs)/train_time)
+    print("Training Throughput - {} images/second ".format(throughput))
+
+
 if __name__ == '__main__':
     FLAGS, _ = parser.parse_known_args()
     main()
